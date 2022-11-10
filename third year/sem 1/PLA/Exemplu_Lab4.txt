@@ -1,0 +1,52 @@
+data segment
+n db 01h, 02h, 03h, 04h, 05h, 06h
+nc db 06h
+bin dd 0
+data ends
+
+code segment
+assume cs:code , ds:data
+start:
+
+mov ax,data
+mov ds,ax
+
+lea SI, n
+lea DI, nc
+lea BX, bin
+
+xor AX, AX
+xor CX, CX
+mov CL, [DI]
+
+push BX
+
+mov BX, 0Ah
+
+l1:
+push CX
+
+xor CX, CX
+
+mul BX
+
+mov CL, [SI]
+
+add AX, CX
+
+inc SI
+
+pop CX
+
+dec CL
+jnz l1
+
+pop BX
+
+MOV [BX], AX
+MOV [BX + 2], DX
+
+mov ah,4ch
+int 21h
+code ends
+end start
