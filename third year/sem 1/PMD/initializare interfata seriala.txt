@@ -1,0 +1,24 @@
+; initializare interfata seriala
+MOV AH, 0
+MOV AL, 01111011b ; baud rate = 9600, even parity
+                  ; stop bits = 1, length=8bits 
+INT 14H
+
+; setare DTR activ
+MOV AH, 4
+OR AL, 01H
+INT 14H
+
+; verificare semnal DSR activ
+V_CTS: MOV AH, 3
+       INT 14H
+       AND AH, 00100000b
+       JZ V_CTS
+	   
+; setare RTS activ
+MOV AH, 4
+OR AL, 02h
+INT 14H
+
+;10H = 0001 0000b
+;02H = 0000 0010b
